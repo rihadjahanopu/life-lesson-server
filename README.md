@@ -27,7 +27,7 @@
 
 ## 🛠️ Tech Stack
 
-- **Runtime:** Node.js 
+- **Runtime:** Node.js
 - **Framework:** Express.js 5.x
 - **Database & ORM:** MongoDB & Mongoose
 - **Authentication:** Better-Auth (`better-auth/adapters/mongodb`)
@@ -59,25 +59,26 @@ src/
 
 The backend exposes several modular RESTful API endpoints. Below is a high-level overview of the available resources:
 
-| Resource Path | Description |
-| :--- | :--- |
-| `/api/auth` | Authentication routes automatically managed by `better-auth`. |
-| `/api/users` | User profile management, updates, and settings. |
-| `/api/lessons` | Fetching, creating, updating, and deleting life lessons. |
-| `/api/comments` | Interactions and discussions under lessons. |
-| `/api/favorites` | User's bookmarked or favorite lessons. |
-| `/api/payments` | Stripe checkout sessions and payment validations. |
-| `/api/uploads` | Cloudinary media upload endpoints. |
-| `/api/reports` | User reporting system for content moderation. |
-| `/api/admin` | Protected routes for administrative dashboard and controls. |
+| Resource Path    | Description                                                   |
+| :--------------- | :------------------------------------------------------------ |
+| `/api/auth`      | Authentication routes automatically managed by `better-auth`. |
+| `/api/users`     | User profile management, updates, and settings.               |
+| `/api/lessons`   | Fetching, creating, updating, and deleting life lessons.      |
+| `/api/comments`  | Interactions and discussions under lessons.                   |
+| `/api/favorites` | User's bookmarked or favorite lessons.                        |
+| `/api/payments`  | Stripe checkout sessions and payment validations.             |
+| `/api/uploads`   | Cloudinary media upload endpoints.                            |
+| `/api/reports`   | User reporting system for content moderation.                 |
+| `/api/admin`     | Protected routes for administrative dashboard and controls.   |
 
-> *Note: Protected endpoints require a valid session cookie established via `/api/auth`.*
+> _Note: Protected endpoints require a valid session cookie established via `/api/auth`._
 
 ---
 
 ## ⚙️ Prerequisites
 
 Before you begin, ensure you have the following installed:
+
 - [Node.js](https://nodejs.org/) (v18 or higher recommended)
 - [MongoDB](https://www.mongodb.com/) (Local instance or MongoDB Atlas)
 - Valid accounts and API keys for [Cloudinary](https://cloudinary.com/), [Stripe](https://stripe.com/), and Google Cloud (for OAuth).
@@ -87,22 +88,28 @@ Before you begin, ensure you have the following installed:
 ## 🚀 Getting Started
 
 ### 1. Clone the repository
+
 ```bash
-git clone <repository-url>
+git clone https://github.com/rihadjahanopu/life-lesson-server.git
 cd life-lesson-server
 ```
 
 ### 2. Install dependencies
+
 ```bash
 npm install
 ```
 
 ### 3. Environment Variables Setup
+
 Create a `.env` file in the root directory:
+
 ```bash
 cp .env.example .env
 ```
+
 Fill in the necessary credentials in your newly created `.env` file:
+
 - `PORT`: The port the server runs on (e.g., 5000)
 - `MONGODB_URI`: Connection string for your MongoDB database.
 - `BETTER_AUTH_SECRET`: A secure random string for signing sessions.
@@ -126,10 +133,12 @@ npm run dev
 This project includes a `vercel.json` file, making it ready to be deployed as Serverless Functions directly on [Vercel](https://vercel.com).
 
 **Deploy via Vercel CLI:**
+
 ```bash
 npm i -g vercel
 vercel
 ```
+
 > **Important:** Ensure you add all your `.env` variables to your project's Environment Variables settings in the Vercel Dashboard before deploying.
 
 ---
