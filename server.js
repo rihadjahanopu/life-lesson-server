@@ -53,6 +53,11 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Digital Life Lessons API is running' });
 });
 
+// Root route
+app.get('/', (req, res) => {
+  res.redirect(config.clientUrl);
+});
+
 // Error handling
 app.use(notFound);
 app.use(errorHandler);
