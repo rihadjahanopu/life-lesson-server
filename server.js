@@ -21,6 +21,9 @@ import { errorHandler, notFound } from './src/middleware/errorHandler.js';
 
 const app = express();
 
+// Trust proxy is needed for secure cookies behind reverse proxies (like Vercel/Render)
+app.set('trust proxy', 1);
+
 // Stripe webhook needs raw body — must be before express.json()
 app.post('/api/payment/webhook', express.raw({ type: 'application/json' }), handleWebhook);
 

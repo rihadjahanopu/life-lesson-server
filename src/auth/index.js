@@ -36,6 +36,15 @@ const auth = betterAuth({
     updateAge: 60 * 60 * 24,
   },
   trustedOrigins: [config.clientUrl],
+  advanced: {
+    defaultCookieAttributes: {
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      secure: process.env.NODE_ENV === "production",
+    },
+    crossSubDomainCookies: {
+      enabled: true,
+    },
+  },
 });
 
 export default auth;
