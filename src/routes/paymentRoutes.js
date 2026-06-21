@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createCheckoutSession, handleWebhook } from '../stripe/paymentController.js';
+import { createCheckoutSession, handleWebhook, verifyCheckoutSession } from '../stripe/paymentController.js';
 import { authenticateUser } from '../middleware/auth.js';
 import config from '../config/index.js';
 
@@ -12,5 +12,6 @@ paymentRouter.get('/config', (req, res) => {
 
 // Webhook must be before express.json() — handled in server.js
 paymentRouter.post('/create-checkout-session', authenticateUser, createCheckoutSession);
+paymentRouter.post('/verify-session', authenticateUser, verifyCheckoutSession);
 
 export { paymentRouter, handleWebhook };

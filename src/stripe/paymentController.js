@@ -61,4 +61,26 @@ export const handleWebhook = async (req, res) => {
   res.json({ received: true });
 };
 
+export const verifyCheckoutSession = async (req, res) => {
+  try {
+    const { sessionId } = req.body;
+    if (!sessionId) {
+      return res.status(400).json({ error: 'Session ID is required' });
+    }
+
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+
+    if (session.payment_status === 'paid' && session.metadata?.userId) {
+      const User = (await import('../models/User.js')).default;
+      await User.findByIdAndUpdate(session.metadata.userId, { isPremium: true });
+      return res.json({ success: true, isPremium: true });
+    }
+
+    return res.json({ success: true, isPremium: false });
+  } catch (error) {
+    console.error('Verify session error:', error.message);
+    res.status(500).json({ error: 'Failed to verify session' });
+  }
+};
+
 export default stripe;
