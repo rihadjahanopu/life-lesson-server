@@ -4,9 +4,9 @@ dotenv.config();
 const config = {
   port: process.env.PORT || 5000,
   mongodbUri: process.env.MONGODB_URI,
-  clientUrl: process.env.CLIENT_URL || 'http://localhost:3000',
+  clientUrl: (process.env.CLIENT_URL || 'http://localhost:3000').replace(/\/+$/, ''),
   betterAuthSecret: process.env.BETTER_AUTH_SECRET,
-  betterAuthUrl: process.env.BETTER_AUTH_URL || `http://localhost:${process.env.PORT || 5000}`,
+  betterAuthUrl: (process.env.BETTER_AUTH_URL || `http://localhost:${process.env.PORT || 5000}`).replace(/\/+$/, ''),
   google: {
     clientId: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
