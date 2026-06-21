@@ -57,9 +57,13 @@ app.use(errorHandler);
 // Start server
 const startServer = async () => {
   await connectDB();
-  app.listen(config.port, () => {
-    console.log(`Server running on port ${config.port}`);
-  });
+  
+  // Only listen to port if not in a serverless environment (like Vercel)
+  if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
+    app.listen(config.port, () => {
+      console.log(`Server running on port ${config.port}`);
+    });
+  }
 };
 
 startServer();
