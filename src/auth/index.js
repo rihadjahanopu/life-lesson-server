@@ -3,10 +3,16 @@ import { mongodbAdapter } from 'better-auth/adapters/mongodb';
 import mongoose from 'mongoose';
 import config from '../config/index.js';
 
+// Create a native MongoClient instance for better-auth since it expects a native Db object, not a Mongoose connection object
+const client = new mongoose.mongo.MongoClient(config.mongodbUri);
+const db = client.db();
+
 const auth = betterAuth({
-  database: mongodbAdapter(mongoose.connection),
+  database: mongodbAdapter(db),
   secret: config.betterAuthSecret,
-  baseURL: config.betterAuthUrl,
+  baseURL: config.betterAuthUrl?.endsWith('/api/auth') 
+    ? config.betterAuthUrl 
+    : `${config.betterAuthUrl?.replace(/\/+$/, '')}/api/auth`,
   emailAndPassword: {
     enabled: true,
     minPasswordLength: 6,
