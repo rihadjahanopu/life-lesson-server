@@ -96,9 +96,7 @@ userRouter.get('/sessions', authenticateUser, async (req, res) => {
     const auth = (await import('../auth/index.js')).default;
 
     const session = await auth.api.getSession({
-      headers: new Headers({
-        cookie: req.headers.cookie || '',
-      }),
+      headers: new Headers(req.headers),
     });
 
     if (!session) {
@@ -182,9 +180,7 @@ userRouter.delete('/sessions/:id', authenticateUser, async (req, res) => {
     const { ObjectId } = await import('mongodb');
 
     const session = await auth.api.getSession({
-      headers: new Headers({
-        cookie: req.headers.cookie || '',
-      }),
+      headers: new Headers(req.headers),
     });
 
     if (!session) {

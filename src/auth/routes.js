@@ -11,9 +11,7 @@ const authRouter = Router();
 authRouter.post('/api/auth/ensure-user', async (req, res) => {
   try {
     const session = await auth.api.getSession({
-      headers: new Headers({
-        cookie: req.headers.cookie || '',
-      }),
+      headers: new Headers(req.headers),
     });
 
     if (!session) {
@@ -64,9 +62,7 @@ authRouter.post('/api/auth/ensure-user', async (req, res) => {
 authRouter.get('/api/auth/session', async (req, res) => {
   try {
     const session = await auth.api.getSession({
-      headers: new Headers({
-        cookie: req.headers.cookie || '',
-      }),
+      headers: new Headers(req.headers),
     });
 
     if (!session) {

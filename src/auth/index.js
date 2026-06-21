@@ -39,7 +39,8 @@ const auth = betterAuth({
   advanced: {
     defaultCookieAttributes: {
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-      secure: process.env.NODE_ENV === "production",
+      secure: process.env.NODE_ENV === "production" || process.env.CLIENT_URL?.includes('https'),
+      path: "/",
     },
   },
 });

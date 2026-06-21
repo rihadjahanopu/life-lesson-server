@@ -4,10 +4,7 @@ import User from '../models/User.js';
 export const authenticateUser = async (req, res, next) => {
   try {
     const session = await auth.api.getSession({
-      headers: new Headers({
-        cookie: req.headers.cookie || '',
-        authorization: req.headers.authorization || '',
-      }),
+      headers: new Headers(req.headers),
     });
 
     if (!session || !session.user) {
