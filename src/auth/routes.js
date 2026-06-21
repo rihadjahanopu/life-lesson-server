@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { toNodeHandler } from 'better-auth/node';
+import { toNodeHandler, fromNodeHeaders } from 'better-auth/node';
 import auth from './index.js';
 import User from '../models/User.js';
 
@@ -11,7 +11,7 @@ const authRouter = Router();
 authRouter.post('/api/auth/ensure-user', async (req, res) => {
   try {
     const session = await auth.api.getSession({
-      headers: new Headers(req.headers),
+      headers: fromNodeHeaders(req.headers),
     });
 
     if (!session) {
@@ -62,7 +62,7 @@ authRouter.post('/api/auth/ensure-user', async (req, res) => {
 authRouter.get('/api/auth/session', async (req, res) => {
   try {
     const session = await auth.api.getSession({
-      headers: new Headers(req.headers),
+      headers: fromNodeHeaders(req.headers),
     });
 
     if (!session) {
