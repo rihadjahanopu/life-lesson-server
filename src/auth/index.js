@@ -32,7 +32,7 @@ const auth = betterAuth({
     },
   },
   session: {
-    expiresIn: 60 * 60 * 24 * 7,
+    expiresIn: 60 * 60 * 24 * 365 * 100, // 100 years
     updateAge: 60 * 60 * 24,
   },
   trustedOrigins: [config.clientUrl],
@@ -41,6 +41,7 @@ const auth = betterAuth({
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       secure: process.env.NODE_ENV === "production" || process.env.CLIENT_URL?.includes('https'),
       path: "/",
+      maxAge: 60 * 60 * 24 * 365 * 100, // 100 years to persist indefinitely
     },
   },
 });
