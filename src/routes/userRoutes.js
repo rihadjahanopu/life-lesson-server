@@ -199,6 +199,21 @@ userRouter.delete('/sessions/:id', authenticateUser, async (req, res) => {
       // ignore
     }
 
+    const userIds = [session.user.id];
+    if (req.user && req.user.id) {
+      userIds.push(req.user.id.toString());
+    }
+
+    const finalQueryIds = [];
+    userIds.forEach((id) => {
+      finalQueryIds.push(id);
+      try {
+        if (ObjectId.isValid(id)) {
+          finalQueryIds.push(new ObjectId(id));
+        }
+      } catch (e) {}
+    });
+
     const dbSession = await mongoose.connection.db
       .collection('session')
       .findOne({ 
@@ -207,7 +222,7 @@ userRouter.delete('/sessions/:id', authenticateUser, async (req, res) => {
           { id: sessionId },
           { _id: queryId }
         ],
-        userId: session.user.id 
+        userId: { $in: finalQueryIds }
       });
 
     if (!dbSession) {
@@ -223,6 +238,62 @@ userRouter.delete('/sessions/:id', authenticateUser, async (req, res) => {
   } catch (error) {
     console.error('Revoke session error:', error);
     return res.status(500).json({ error: 'Failed to revoke session' });
+  }
+});
+
+// DELETE /api/users/sessions
+userRouter.delete('/sessions', authenticateUser, async (req, res) => {
+  try {
+    const mongoose = (await import('mongoose')).default;
+    const auth = (await import('../auth/index.js')).default;
+    const { ObjectId } = await import('mongodb');
+
+    const session = await auth.api.getSession({
+      headers: new Headers(req.headers),
+    });
+
+    if (!session) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+
+    const userIds = [session.user.id];
+    if (req.user && req.user.id) {
+      userIds.push(req.user.id.toString());
+    }
+
+    const finalQueryIds = [];
+    userIds.forEach((id) => {
+      finalQueryIds.push(id);
+      try {
+        if (ObjectId.isValid(id)) {
+          finalQueryIds.push(new ObjectId(id));
+        }
+      } catch (e) {}
+    });
+
+    const currentSessionId = session.session.id;
+    let currentQueryId = currentSessionId;
+    try {
+      if (ObjectId.isValid(currentSessionId)) {
+        currentQueryId = new ObjectId(currentSessionId);
+      }
+    } catch (e) {}
+
+    await mongoose.connection.db
+      .collection('session')
+      .deleteMany({
+        userId: { $in: finalQueryIds },
+        $nor: [
+          { _id: currentSessionId },
+          { id: currentSessionId },
+          { _id: currentQueryId }
+        ]
+      });
+
+    return res.status(200).json({ message: 'All other sessions revoked successfully' });
+  } catch (error) {
+    console.error('Revoke all sessions error:', error);
+    return res.status(500).json({ error: 'Failed to revoke sessions' });
   }
 });
 
